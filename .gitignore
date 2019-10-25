@@ -3,3 +3,4 @@
 /.vscode
 /.vagrant
 .env
+/database/database.sqlite
