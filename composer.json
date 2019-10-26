@@ -17,8 +17,12 @@
     ],
     "require": {
         "php": "^7.2",
+        "gentle/bitbucket-api": "^1.1",
         "illuminate/database": "^6.0",
-        "laravel-zero/framework": "^6.0"
+        "laravel-zero/framework": "^6.0",
+        "nelexa/zip": "^3.1",
+        "symfony/filesystem": "^4.3",
+        "tutv95/wp-package-parser": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.4",
