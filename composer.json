@@ -17,6 +17,7 @@
     ],
     "require": {
         "php": "^7.2",
+        "czproject/git-php": "^3.17",
         "gentle/bitbucket-api": "^1.1",
         "illuminate/database": "^6.0",
         "laravel-zero/framework": "^6.0",

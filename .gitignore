@@ -4,3 +4,7 @@
 /.vagrant
 .env
 /database/database.sqlite
+/id_rsa
+/id_rsa.pub
+/packages/
+/temp/
