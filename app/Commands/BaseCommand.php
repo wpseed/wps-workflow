@@ -14,6 +14,13 @@ class BaseCommand extends Command
     protected $zip;
     protected $bitbucket;
 
+    /**
+     * The signature of the command.
+     *
+     * @var string
+     */
+    protected $signature = 'base';
+
     public function __construct() {
         parent::__construct();
         $this->filesystem = new Filesystem();
