@@ -49,6 +49,8 @@ class PackagesAdd extends BaseCommand
 
         $files_list = scandir($folder_upload);
 
+        natsort($files_list);
+
         $this->filesystem->remove(base_path(config('packages.extract')));
 
         foreach ($files_list as $files_item) {
@@ -92,8 +94,12 @@ class PackagesAdd extends BaseCommand
             }
 
             if (in_array('v' . $package_metadata['version'], $git_repo_tags)) {
-                $this->error('Repository Error: Package version exists');
-                //$this->filesystem->remove($file_path);
+                $this->error('Repository Error: Package version exists in repository');
+                continue;
+            }
+
+            if (!($this->db_package_version_check($package_slug, $package_type, $package_metadata['version']))) {
+                $this->error('Database Error: Package version smaller then exists versions');
                 continue;
             }
 
@@ -122,8 +128,6 @@ class PackagesAdd extends BaseCommand
             $this->db_package_insert($package_metadata['name'], $package_slug, $package_type, $package_metadata['description']);
             $this->db_package_version_insert($package_slug, $package_type, $package_metadata['version'], $file_hash_sha256, $file_hash_sha1, $file_hash_md5);
             $this->info('Package version added to database');
-
-            //$this->filesystem->remove($file_path);
         }
 
     }
@@ -139,13 +143,27 @@ class PackagesAdd extends BaseCommand
         // $schedule->command(static::class)->everyMinute();
     }
 
+    public function db_package_version_check($slug, $type, $version)
+    {
+        $package = ('plugin' === $type) ? new Plugin() : new Theme();
+        $package_current = $package->where('slug', $slug)->first();
+        if (!$package_current) {
+            return true;
+        }
+        $package_versions =  ('plugin' === $type) ? $package_current->plugin_versions : $package_current->theme_versions;
+        $package_versions_array = $package_versions->sortByDesc('version')->values()->map(function ($item, $key) {
+            return $item['version'];
+        });
+        return(($version > $package_versions_array[0]));
+    }
+
     public function db_package_insert($name, $slug, $type, $description)
     {
         $package = ('plugin' === $type) ? new Plugin() : new Theme();
 
-        $package_exists = $package->where('slug', $slug)->first();
+        $package_current = $package->where('slug', $slug)->first();
 
-        if ($package_exists) {
+        if ($package_current) {
             $this->error('Database Error: Package already exists');
             return false;
         }
