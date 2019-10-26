@@ -2,5 +2,6 @@
 
 return [
     'upload' => 'packages',
-    'extract' => 'temp'
+    'extract' => 'temp',
+    'result' => 'result'
 ];
