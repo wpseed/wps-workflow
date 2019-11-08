@@ -17,7 +17,7 @@ class PackagesAdd extends BaseCommand
      *
      * @var string
      */
-    protected $signature = 'packages:add';
+    protected $signature = 'packages:add {--check}';
 
     /**
      * The description of the command.
@@ -98,7 +98,7 @@ class PackagesAdd extends BaseCommand
                 continue;
             }
 
-            if (!($this->db_package_version_check($package_slug, $package_type, $package_metadata['version']))) {
+            if ($this->option('check') && !$this->db_package_version_check($package_slug, $package_type, $package_metadata['version'])) {
                 $this->error('Database Error: Package version smaller then exists versions');
                 continue;
             }

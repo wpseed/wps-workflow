@@ -17,19 +17,21 @@
     ],
     "require": {
         "php": "^7.2",
+        "ext-json": "*",
         "composer/composer": "^1.8",
         "czproject/git-php": "^3.17",
         "gentle/bitbucket-api": "^1.1",
         "illuminate/database": "^6.0",
         "laravel-zero/framework": "^6.0",
+        "laravel/helpers": "^1.1",
         "nelexa/zip": "^3.1",
         "symfony/filesystem": "^4.3",
-        "tutv95/wp-package-parser": "^1.0",
-        "ext-json": "*"
+        "tutv95/wp-package-parser": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.4",
         "mockery/mockery": "^1.0",
+        "nunomaduro/collision": "^3.0",
         "phpunit/phpunit": "^8.0"
     },
     "autoload": {
