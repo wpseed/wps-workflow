@@ -59,18 +59,13 @@ class PackagesBuild extends Command
                 $normalized_version = $version_parser->normalize($plugin_version->version);
                 $version_content = [
                     'name' => $plugin_package_name,
-                    'type' => 'wphub-plugin',
+                    'type' => config('bitbucket.accounts.plugins'),
                     'version' => $plugin_version->version,
                     'version_normalized' => $normalized_version,
                     'uid' => $uid++,
                     'dist' => [
                         'type' => 'zip',
                         'url' => 'https://bitbucket.org/' . $plugin_package_name . '/get/v' . $plugin_version->version . '.zip'
-                    ],
-                    'source' => [
-                        'type' => 'git',
-                        'url' => 'https://bitbucket.org/' . $plugin_package_name . '.git',
-                        'reference' => 'tags/' . $plugin_version->version
                     ],
                     'require' => [
                         'composer/installers' => '~1.0'
