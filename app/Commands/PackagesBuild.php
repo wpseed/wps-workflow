@@ -59,7 +59,7 @@ class PackagesBuild extends Command
                 $normalized_version = $version_parser->normalize($plugin_version->version);
                 $version_content = [
                     'name' => $plugin_package_name,
-                    'type' => 'wphub-plugin',
+                    'type' => env('COMPOSER_PLUGINS_TYPE', 'wpseed-plugin'),
                     'version' => $plugin_version->version,
                     'version_normalized' => $normalized_version,
                     'uid' => $uid++,
