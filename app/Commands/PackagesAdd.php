@@ -61,8 +61,8 @@ class PackagesAdd extends BaseCommand
             }
             $this->info('Try add package from archive: ' . $files_item);
             if ('zip' !== $file_ext) {
-                $this->error('File Error: File extension is not a zip');
-                //$this->filesystem->remove($file_path);
+                $this->error('File Error: File extension is not a zip, file will be removed');
+                $this->filesystem->remove($file_path);
                 continue;
             }
             $package = new \Max_WP_Package($file_path);
@@ -93,7 +93,7 @@ class PackagesAdd extends BaseCommand
                 $this->error('Repository Fatal Error: ' . $t->getMessage());
             }
 
-            if (in_array('v' . $package_metadata['version'], $git_repo_tags)) {
+            if (in_array($this->version_parser->normalize($package_metadata['version']), array_map([$this->version_parser, 'normalize'], $git_repo_tags))) {
                 $this->error('Repository Error: Package version exists in repository');
                 continue;
             }

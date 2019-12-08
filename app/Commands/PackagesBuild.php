@@ -8,7 +8,7 @@ use Composer\Package\Version\VersionParser;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 
-class PackagesBuild extends Command
+class PackagesBuild extends BaseCommand
 {
     /**
      * The name and signature of the console command.
@@ -55,8 +55,7 @@ class PackagesBuild extends Command
             $uid = 1;
 
             foreach ($plugin_versions as $plugin_version) {
-                $version_parser = new VersionParser();
-                $normalized_version = $version_parser->normalize($plugin_version->version);
+                $normalized_version = $this->version_parser->normalize($plugin_version->version);
                 $version_content = [
                     'name' => $plugin_package_name,
                     'type' => config('bitbucket.accounts.plugins'),
