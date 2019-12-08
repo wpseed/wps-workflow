@@ -56,5 +56,5 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "bin": ["core-cli"]
+    "bin": ["wps"]
 }
