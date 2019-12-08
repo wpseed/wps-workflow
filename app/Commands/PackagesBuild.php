@@ -63,11 +63,7 @@ class PackagesBuild extends BaseCommand
                 $normalized_version = $this->version_parser->normalize($plugin_version->version);
                 $version_content = [
                     'name' => $plugin_package_name,
-<<<<<<< HEAD
-                    'type' => config('bitbucket.accounts.plugins'),
-=======
                     'type' => env('COMPOSER_PLUGINS_TYPE', 'wpseed-plugin'),
->>>>>>> github/master
                     'version' => $plugin_version->version,
                     'version_normalized' => $normalized_version,
                     'uid' => $uid++,
