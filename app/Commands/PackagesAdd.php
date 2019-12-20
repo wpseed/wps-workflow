@@ -5,7 +5,7 @@ namespace App\Commands;
 use App\Models\Plugin;
 use App\Models\PluginVersion;
 use App\Models\Theme;
-use App\Theme\ThemeVersion;
+use App\Models\ThemeVersion;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 use Cz\Git\GitRepository;
