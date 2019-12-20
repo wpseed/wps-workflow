@@ -88,7 +88,7 @@ class PackagesBuild extends BaseCommand
             $theme_content = [];
             $uid = 1;
 
-            foreach ($theme_versions as $ptheme_version) {
+            foreach ($theme_versions as $theme_version) {
                 $version_parser = new VersionParser();
                 $normalized_version = $version_parser->normalize($theme_version->version);
                 $version_content = [
