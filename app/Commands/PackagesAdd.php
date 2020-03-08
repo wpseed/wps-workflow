@@ -88,12 +88,13 @@ class PackagesAdd extends BaseCommand
                     'git@bitbucket.org:' . $bitbucket_account . '/' . $package_slug . '.git'
                 );
                 $git_repo->fetch(null, ['--all']);
-                $git_repo_tags = $git_repo->getTags() ? $git_repo->getTags() : [];
             } catch (\Throwable $t) {
                 $this->error('Repository Fatal Error: ' . $t->getMessage());
             }
 
-            if (in_array($this->version_parser->normalize($package_metadata['version']), array_map([$this->version_parser, 'normalize'], $git_repo_tags))) {
+            $git_repo_tags = $git_repo->getTags() ? $git_repo->getTags() : [];
+
+            if (in_array($this->version_parser->normalize($package_metadata['version']), array_map([$this->version_parser, 'normalize'], $git_repo_tags), true)) {
                 $this->error('Repository Error: Package version exists in repository');
                 continue;
             }
