@@ -16,8 +16,9 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.3",
         "ext-json": "*",
+        "cocur/slugify": "^4.0",
         "composer/composer": "^1.8",
         "czproject/git-php": "^3.17",
         "gentle/bitbucket-api": "^1.1",
