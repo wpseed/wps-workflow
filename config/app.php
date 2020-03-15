@@ -15,6 +15,8 @@ return [
 
     'name' => 'Wps',
 
+    'hasura_active' => env('HASURA_ACTIVE', false),
+
     /*
     |--------------------------------------------------------------------------
     | Application Version
