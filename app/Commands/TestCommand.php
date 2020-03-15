@@ -3,7 +3,6 @@
 namespace App\Commands;
 
 use App\Helpers\HasuraHelper;
-use Cocur\Slugify\Slugify;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 
@@ -30,15 +29,16 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        $plugin_name = 'Test Plugin New New sdfsdf sdfsdf      sss';
+        $plugin_name = 'Test Fresh';
         $hasura = new HasuraHelper();
-        var_dump($hasura->checkPlugin('test'));
+        $result = $hasura->addPlugin($plugin_name);
+        var_dump($result);
     }
 
     /**
      * Define the command's schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
+     * @param Schedule $schedule
      * @return void
      */
     public function schedule(Schedule $schedule): void
