@@ -8,9 +8,11 @@ use Symfony\Component\HttpClient\HttpClient;
 class HasuraHelper {
 
     public $hasura_response;
+    private $http_client;
 
     public function __construct()
     {
+        $this->http_client = HttpClient::create();
     }
 
     protected function query($query): \Symfony\Contracts\HttpClient\ResponseInterface
@@ -19,8 +21,7 @@ class HasuraHelper {
             'hasura_endpoint'   => config('hasura.api.hasura_endpoint'),
             'hasura_secret'     => config('hasura.api.hasura_secret')
         ];
-        $client = HttpClient::create();
-        return $this->hasura_response = $client->request(
+        return $this->hasura_response = $this->http_client->request(
             'POST',
             $hasura_params['hasura_endpoint'],
             [
@@ -35,7 +36,7 @@ class HasuraHelper {
         );
     }
 
-    public function checkPlugin($plugin_slug)
+    public function checkPlugin($plugin_slug): bool
     {
         $check = <<<GRAPHQL
         query MyQuery {
@@ -46,21 +47,26 @@ class HasuraHelper {
         }
         GRAPHQL;
         $response = $this->query($check);
-        $plugins = json_decode($response->getContent(false), true, 512, JSON_THROW_ON_ERROR);
-        return (bool) $plugins['data']['wps_plugins'];
+        $plugins = json_decode($response->getContent(false), false, 512, JSON_THROW_ON_ERROR);
+        return (bool) $plugins->data->wps_plugins;
     }
 
     public function addPlugin(
         $plugin_name,
+        $plugin_slug = null,
         $plugin_description = null,
         $plugin_short_description = null,
         $plugin_type = 'free',
         $plugin_status = 'private'
-    ): \Symfony\Contracts\HttpClient\ResponseInterface
+    )
     {
-        $plugin_slug = (new Slugify)->slugify($plugin_name);
+        if (null === $plugin_slug) {
+            $plugin_slug = (new Slugify)->slugify($plugin_name);
+        }
 
-        var_dump($this->query($check)->getStatusCode());
+        if ($this->checkPlugin($plugin_slug)) {
+            return false;
+        }
 
         $mutation = <<<GRAPHQL
         mutation pluginAdd {
@@ -80,6 +86,6 @@ class HasuraHelper {
             }
         }
         GRAPHQL;
-        return $this->query($check);
+        return $this->query($mutation);
     }
 }
