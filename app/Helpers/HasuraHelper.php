@@ -56,8 +56,8 @@ class HasuraHelper {
         $plugin_slug = null,
         $plugin_description = null,
         $plugin_short_description = null,
-        $plugin_type = 'free',
-        $plugin_status = 'private'
+        $plugin_type = 'paid',
+        $plugin_status = 'public'
     )
     {
         if (null === $plugin_slug) {
