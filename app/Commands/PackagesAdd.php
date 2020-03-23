@@ -114,6 +114,7 @@ class PackagesAdd extends BaseCommand
                     $git_repo->checkout('master');
                     $git_repo->pull();
                 }
+                exec('cd ' . $extract_path . '/' . $package_slug . ' && rm -rf *');
                 $zipFile = $this->zip->openFile($file_path);
                 $zipFile->extractTo($extract_path);
                 $git_repo->addAllChanges();
@@ -141,7 +142,7 @@ class PackagesAdd extends BaseCommand
                 if (! $result) {
                     $this->error('Wp Seed Database: Package add error');
                 }
-                $this->info('Wp Seed Database: ' . $result->getContent());
+                var_dump($result);
             }
         }
     }
