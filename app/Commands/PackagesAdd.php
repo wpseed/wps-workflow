@@ -91,7 +91,7 @@ class PackagesAdd extends BaseCommand
             $this->bitbucket->create($bitbucket_account, $package_slug, substr($package_metadata['description'], 0, 755));
 
             try {
-                $git_repo = GitRepository::init($extract_path . '/' . $package_slug);
+                $git_repo = GitRepository::init($extract_path);
                 $git_repo->addRemote(
                     'origin',
                     'git@bitbucket.org:' . $bitbucket_account . '/' . $package_slug . '.git'
@@ -118,7 +118,7 @@ class PackagesAdd extends BaseCommand
                     $git_repo->checkout('master');
                     $git_repo->pull();
                 }
-                exec('cd ' . $extract_path . '/' . $package_slug . ' && rm -rf *');
+                exec('cd ' . $extract_path . ' && rm -rf *');
                 $zipFile = $this->zip->openFile($file_path);
                 $zipFile->extractTo($extract_path);
                 $git_repo->addAllChanges();
