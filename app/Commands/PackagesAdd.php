@@ -74,7 +74,11 @@ class PackagesAdd extends BaseCommand
             $package_type = $package->get_type();
             $package_metadata = $package->get_metadata();
             $package_slug = preg_replace('/\s/', '', $package_metadata['slug']);
-
+            if (!preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $package_slug)) {
+                $package_slug = preg_replace('/\s/', '', $package_metadata['text_domain']);
+                $this->info('Uncorrect slug: ' . $package_slug . ' changed to: ' . $package_metadata['text_domain']);
+            }
+            
             $bitbucket_account = ('plugin' === $package_type) ? $bitbucket_account_plugins : $bitbucket_account_themes;
             $this->info('Package: ' . $package_slug . ', version: ' . $package_metadata['version'] . ', type: ' . $package_type);
             $file_hash_sha256 = hash_file('sha256', $file_path);
