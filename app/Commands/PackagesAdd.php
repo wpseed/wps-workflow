@@ -73,12 +73,15 @@ class PackagesAdd extends BaseCommand
             $package = new \Max_WP_Package($file_path);
             $package_type = $package->get_type();
             $package_metadata = $package->get_metadata();
-            $package_slug = preg_replace('/\s/', '', $package_metadata['slug']);
+            $original_package_slug = preg_replace('/\s/', '', $package_metadata['slug']);
+            $package_slug = $original_package_slug;
+            $package_uncorrect_folder = false;
             if (!preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $package_slug)) {
                 $package_slug = preg_replace('/\s/', '', $package_metadata['text_domain']);
-                $this->info('Uncorrect slug: ' . $package_slug . ' changed to: ' . $package_metadata['text_domain']);
+                $this->info('Uncorrect slug: ' . $original_package_slug . ' changed to: ' . $package_metadata['text_domain']);
+                $package_uncorrect_folder = true;
             }
-            
+
             $bitbucket_account = ('plugin' === $package_type) ? $bitbucket_account_plugins : $bitbucket_account_themes;
             $this->info('Package: ' . $package_slug . ', version: ' . $package_metadata['version'] . ', type: ' . $package_type);
             $file_hash_sha256 = hash_file('sha256', $file_path);
@@ -86,12 +89,14 @@ class PackagesAdd extends BaseCommand
             $file_hash_md5 = hash_file('md5', $file_path);
 
             $extract_path = base_path(config('packages.extract') . '/' . $file_hash_sha256);
-            $this->filesystem->mkdir($extract_path, 0755);
+            $git_path = $extract_path . '/' . $package_slug;
+
+            $this->filesystem->mkdir($git_path, 0755);
 
             $this->bitbucket->create($bitbucket_account, $package_slug, substr($package_metadata['description'], 0, 755));
 
             try {
-                $git_repo = GitRepository::init($extract_path);
+                $git_repo = GitRepository::init($git_path);
                 $git_repo->addRemote(
                     'origin',
                     'git@bitbucket.org:' . $bitbucket_account . '/' . $package_slug . '.git'
@@ -118,9 +123,13 @@ class PackagesAdd extends BaseCommand
                     $git_repo->checkout('master');
                     $git_repo->pull();
                 }
-                exec('cd ' . $extract_path . ' && rm -rf *');
+                exec('cd ' . $git_path . ' && rm -rf *');
                 $zipFile = $this->zip->openFile($file_path);
-                $zipFile->extractTo($extract_path);
+                if ($package_uncorrect_folder) {
+                    $zipFile->extractTo($git_path);
+                } else {
+                    $zipFile->extractTo($extract_path);
+                }
                 $git_repo->addAllChanges();
                 $git_repo->commit('v' . $package_metadata['version']);
                 $git_repo->createTag(

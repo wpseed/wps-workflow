@@ -46,10 +46,12 @@ class PackagesTest extends Command
             $package = new \Max_WP_Package($file_path);
             $package_type = $package->get_type();
             $package_metadata = $package->get_metadata();
-            $package_slug = preg_replace('/\s/', '', $package_metadata['slug']);
+            $original_package_slug = preg_replace('/\s/', '', $package_metadata['slug']);
+            $package_slug = $original_package_slug;
+            var_dump($package_slug);
             if (!preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $package_slug)) {
                 $package_slug = preg_replace('/\s/', '', $package_metadata['text_domain']);
-                $this->info('Uncorrect slug: ' . $package_slug . ' changed to: ' . $package_metadata['text_domain']);
+                $this->info('Uncorrect slug: ' . $original_package_slug . ' changed to: ' . $package_metadata['text_domain']);
             }
             $this->info('Package: ' . $package_slug . ', version: ' . $package_metadata['version'] . ', type: ' . $package_type);
             //var_dump($package_metadata);
