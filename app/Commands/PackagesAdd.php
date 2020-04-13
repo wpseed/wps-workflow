@@ -108,7 +108,7 @@ class PackagesAdd extends BaseCommand
 
             $git_repo_tags = $git_repo->getTags() ? $git_repo->getTags() : [];
 
-            if (in_array($this->version_parser->normalize($package_metadata['version']), array_map([$this->version_parser, 'normalize'], $git_repo_tags), true)) {
+            if (in_array($package_metadata['version'], $git_repo_tags, true)) {
                 $this->error('Repository Error: Package version exists in repository');
                 continue;
             }

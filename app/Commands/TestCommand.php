@@ -5,8 +5,9 @@ namespace App\Commands;
 use App\Helpers\HasuraHelper;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
+use PHLAK\SemVer\Version;
 
-class TestCommand extends Command
+class TestCommand extends BaseCommand
 {
     /**
      * The signature of the command.
@@ -29,10 +30,7 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        $plugin_name = 'Test Fresh';
-        $hasura = new HasuraHelper();
-        $result = $hasura->addPlugin($plugin_name);
-        var_dump($result);
+        var_dump($this->version_parser->normalize('v5.8.0-beta-RC1'));
     }
 
     /**
