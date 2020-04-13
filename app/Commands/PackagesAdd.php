@@ -95,8 +95,8 @@ class PackagesAdd extends BaseCommand
 
             $this->bitbucket->create($bitbucket_account, $package_slug, substr($package_metadata['description'], 0, 755));
 
+            $git_repo = GitRepository::init($git_path);
             try {
-                $git_repo = GitRepository::init($git_path);
                 $git_repo->addRemote(
                     'origin',
                     'git@bitbucket.org:' . $bitbucket_account . '/' . $package_slug . '.git'
@@ -108,7 +108,7 @@ class PackagesAdd extends BaseCommand
 
             $git_repo_tags = $git_repo->getTags() ? $git_repo->getTags() : [];
 
-            if (in_array($package_metadata['version'], $git_repo_tags, true)) {
+            if (in_array(str_val($this->version_parser->normalize($package_metadata['version'])), array_map('strval', $git_repo_tags), true)) {
                 $this->error('Repository Error: Package version exists in repository');
                 continue;
             }
