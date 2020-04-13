@@ -89,7 +89,7 @@ class PackagesAdd extends BaseCommand
             $file_hash_md5 = hash_file('md5', $file_path);
 
             $extract_path = base_path(config('packages.extract') . '/' . $file_hash_sha256);
-            $git_path = $extract_path . '/' . $package_slug;
+            $git_path = $extract_path . '/' . $package_metadata['slug'];
 
             $this->filesystem->mkdir($git_path, 0755);
 
@@ -107,8 +107,6 @@ class PackagesAdd extends BaseCommand
             }
 
             $git_repo_tags = $git_repo->getTags() ? $git_repo->getTags() : [];
-
-            var_dump($git_repo_tags);
 
             if (in_array($package_metadata['version'], $git_repo_tags, true)) {
                 $this->error('Repository Error: Package version exists in repository');
