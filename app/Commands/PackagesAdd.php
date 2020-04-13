@@ -73,7 +73,7 @@ class PackagesAdd extends BaseCommand
             $package = new \Max_WP_Package($file_path);
             $package_type = $package->get_type();
             $package_metadata = $package->get_metadata();
-            $original_package_slug = preg_replace('/\s/', '', $package_metadata['slug']);
+            $original_package_slug = mb_strtolower(preg_replace('/\s/', '', $package_metadata['slug']), 'UTF-8');
             $package_slug = $original_package_slug;
             $package_uncorrect_folder = false;
             if (!preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $package_slug)) {
